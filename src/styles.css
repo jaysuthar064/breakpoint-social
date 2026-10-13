@@ -1,0 +1,426 @@
+@import 'tailwindcss';
+
+/*
+ * Breakpoint Social design system.
+ *
+ * Every value here comes from Documents/DESIGN-ANALYSIS.md, which was derived
+ * from the reference site's compiled stylesheet. Where a number looks arbitrary
+ * it is not: it is what the reference actually uses.
+ */
+
+@theme static {
+  /* Section 2: palette. */
+  --color-cream: #fcf5e9;
+  --color-pale: #f6f8f5;
+  --color-clay: #84572f;
+  --color-clay-hover: #6c4625;
+  --color-sand: #f1d5a0;
+  --color-sage: #92ada4;
+  --color-olive: #526840;
+  --color-dark: #141615;
+  --color-darker: #0e100f;
+  --color-ink: #1a1a1a;
+
+  /* Section 3: type. */
+  --font-display: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Poppins', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-script: 'Caveat', ui-serif, cursive;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /*
+   * Anchored headings must not hide under the sticky header when someone
+   * follows a /services/#Social_Media_Management link.
+   */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    /* The single most recognisable trait of the design. */
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--color-sage);
+    color: #fff;
+  }
+
+  /* Section 6: motion is hover-only, and collapses entirely on request. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+
+    /* Belt and braces: even if the reveal script somehow ran, nothing stays
+       hidden when the user has asked for less movement. */
+    [data-reveal],
+    [data-reveal-stagger] > * {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Body copy written in the CMS arrives as a narrow set of tags. The reset
+   * strips list markers and heading sizes, so the published article needs them
+   * back; this is the one place that happens.
+   */
+  .prose-bps h3 {
+    margin: 2rem 0 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .prose-bps h4 {
+    margin: 1.5rem 0 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .prose-bps p {
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .prose-bps ul,
+  .prose-bps ol {
+    margin: 0 0 1.25rem 1.25rem;
+    line-height: 1.75;
+  }
+
+  .prose-bps ul {
+    list-style: disc;
+  }
+
+  .prose-bps ol {
+    list-style: decimal;
+  }
+
+  .prose-bps li {
+    margin-bottom: 0.5rem;
+  }
+
+  /*
+   * Body copy will eventually contain a long URL or a hashtag with no break
+   * opportunity. Without this it pushes the layout wider than a phone viewport
+   * and the whole page scrolls sideways. `anywhere` rather than `break-all`, so
+   * ordinary prose still breaks on word boundaries.
+   */
+  .prose-bps {
+    overflow-wrap: anywhere;
+  }
+
+  .prose-bps a {
+    color: var(--color-clay);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose-bps strong {
+    font-weight: 700;
+  }
+
+  .prose-bps > :first-child {
+    margin-top: 0;
+  }
+
+  /* Dark band inherits light text. */
+  .prose-bps.on-dark a {
+    color: var(--color-sand);
+  }
+}
+
+@layer components {
+  /*
+   * Scroll reveal.
+   *
+   * Scoped to `[data-reveal-ready]`, which only the reveal script sets. Without
+   * JavaScript, or under reduced motion, none of these rules apply and every
+   * element is simply visible. That ordering matters: hiding content by default
+   * and revealing it with script means a crawler, or anyone whose JS fails,
+   * sees an empty page.
+   */
+  [data-reveal-ready] [data-reveal] {
+    opacity: 0;
+    /* translate and opacity only: both run on the compositor, so the reveal
+       cannot cause layout work while the user is scrolling. */
+    transform: translateY(14px);
+    transition:
+      opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal-ready] [data-reveal][data-revealed] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /*
+   * Children of a revealed group come in just behind it. Capped at six, after
+   * which the last item would wait almost half a second and the page would feel
+   * slow rather than considered.
+   */
+  [data-reveal-ready] [data-reveal-stagger] > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 560ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(1) { transition-delay: 0ms; }
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(2) { transition-delay: 70ms; }
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(3) { transition-delay: 140ms; }
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(4) { transition-delay: 210ms; }
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(5) { transition-delay: 280ms; }
+  [data-reveal-ready] [data-reveal-stagger][data-revealed] > *:nth-child(n + 6) { transition-delay: 320ms; }
+
+  /*
+   * Underline that grows from the left on hover. Used for text links where a
+   * colour change alone is a weak affordance.
+   */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@layer components {
+  /*
+   * Hero headline: a wipe, not a fade.
+   *
+   * Each line sits in an overflow-hidden box and slides up from below it, so
+   * the text appears to be uncovered rather than to materialise. It is the one
+   * piece of motion on the page that is purely expressive, and it is confined
+   * to the single element the whole page is built around.
+   */
+  [data-reveal-ready] .hero-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  [data-reveal-ready] .hero-line > span {
+    display: block;
+    transform: translateY(105%);
+    transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-reveal-ready] .hero-line[data-revealed] > span,
+  [data-reveal-ready] [data-revealed] .hero-line > span {
+    transform: none;
+  }
+
+  /* The second line trails the first, so the headline reads in order. */
+  [data-reveal-ready] .hero-line:nth-child(2) > span {
+    transition-delay: 110ms;
+  }
+
+  /*
+   * Reading progress, driven by the native scroll timeline.
+   *
+   * No JavaScript runs while scrolling: the browser animates this off the main
+   * thread. Gated behind @supports so browsers without it get no bar at all
+   * rather than a janky imitation.
+   */
+  @supports (animation-timeline: scroll()) {
+    .read-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      transform-origin: 0 50%;
+      background: var(--color-clay);
+      z-index: 50;
+      animation: read-progress linear;
+      animation-timeline: scroll(root block);
+    }
+
+    @keyframes read-progress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  /*
+   * Card media drifts slightly as the card crosses the viewport. A real
+   * parallax, computed by the browser from the scroll timeline rather than
+   * from a scroll handler, which is why it stays smooth on a phone.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .card-media > img {
+        animation: card-drift linear both;
+        animation-timeline: view();
+        animation-range: entry 10% exit 90%;
+      }
+
+      @keyframes card-drift {
+        from {
+          transform: scale(1.08) translateY(-1.5%);
+        }
+        to {
+          transform: scale(1.08) translateY(1.5%);
+        }
+      }
+    }
+  }
+
+  /* The magnetic button needs a transition for the release, not the pull. */
+  [data-magnetic] {
+    transition:
+      transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  /*
+   * Cross-route transition. Short on purpose: anything longer than this and
+   * the site feels like it is loading rather than moving.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) {
+      animation: vt-out 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    }
+
+    ::view-transition-new(root) {
+      animation: vt-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes vt-out {
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes vt-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Skeleton shimmer.
+   *
+   * A sweep rather than a pulse: a pulsing block reads as something broken
+   * blinking, a sweep reads as something arriving. Tinted with the brand sand
+   * so the wait still looks like this site.
+   */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: #efe6d4;
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(255 255 255 / 0.55) 50%,
+      transparent 100%
+    );
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-sweep {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /*
+   * Under reduced motion the sweep stops, but the block must stay visible:
+   * removing the animation entirely would leave a plain grey box with no
+   * indication anything is happening, which is worse than a still one.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+      animation: none;
+      transform: none;
+      background: rgb(255 255 255 / 0.3);
+    }
+  }
+
+  /*
+   * Content fades in once it replaces the skeleton, so the swap is a settle
+   * rather than a snap. Short, because this is the point the reader is already
+   * waiting at.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .content-enter {
+      animation: content-enter 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes content-enter {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+}
