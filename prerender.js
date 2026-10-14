@@ -90,8 +90,17 @@ async function main() {
 
   let snapshot;
 
+  // A host that refuses the connection fails fast. A host that accepts it and
+  // then never answers -- a firewall that blackholes, PHP wedged on a cold
+  // cache -- would hang here forever, and on a CI host that means a build that
+  // sits silent until the platform kills it 45 minutes later. A timeout turns
+  // that into a legible error.
+  const TIMEOUT_MS = Number(process.env.PRERENDER_TIMEOUT_MS ?? 30000);
+
   try {
-    const response = await fetch(apiUrl('/bps/v1/snapshot'));
+    const response = await fetch(apiUrl('/bps/v1/snapshot'), {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
@@ -99,13 +108,16 @@ async function main() {
 
     snapshot = await response.json();
   } catch (error) {
-    // Failing loudly matters: silently shipping empty HTML is exactly the
-    // outcome this step exists to prevent.
     // Failing the build is deliberate. Shipping an empty shell is the exact
     // outcome prerendering exists to prevent, so a deploy that cannot read the
     // content must not succeed quietly.
+    const why =
+      error.name === 'TimeoutError'
+        ? `no response in ${TIMEOUT_MS / 1000}s`
+        : error.message;
+
     console.error('');
-    console.error(`prerender: could not reach the API (${error.message}).`);
+    console.error(`prerender: could not reach the API (${why}).`);
     console.error(`prerender: tried ${apiUrl('/bps/v1/snapshot')}`);
     console.error('');
     console.error('  The build needs to read the site content to generate HTML.');
@@ -116,6 +128,9 @@ async function main() {
     console.error('        pretty permalinks  https://example.com/wp-json/');
     console.error('        plain permalinks   https://example.com/index.php?rest_route=');
     console.error('   4. At least one page is published, or the snapshot is empty.');
+    console.error('');
+    console.error('  A slow host rather than an unreachable one: raise the limit with');
+    console.error('  PRERENDER_TIMEOUT_MS=60000.');
     console.error('');
     process.exit(1);
   }
