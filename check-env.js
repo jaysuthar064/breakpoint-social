@@ -1,11 +1,15 @@
 /**
  * Refuses a release build that is pointed at a developer's machine.
  *
- * This repo is deployed by committing `dist/`, which means the build happens
- * locally and whatever is in `.env` at that moment becomes production. The
- * failure mode is quiet and expensive: build with local values, push, and the
- * live site asks every visitor's browser for `localhost:8887`, which answers
- * nothing. The page looks perfect on the machine that built it.
+ * `VITE_API_BASE` is baked into the bundle at build time, so whatever the build
+ * host has in its environment becomes production. The failure mode is quiet and
+ * expensive: build with local values and the live site asks every visitor's
+ * browser for `localhost:8887`, which answers nothing. The page looks perfect
+ * on the machine that built it.
+ *
+ * Vercel supplies the real values as environment variables; locally they come
+ * from `.env`. Either way the check runs before the build, because a bundle
+ * with the wrong API baked in looks completely normal from the outside.
  *
  * So a release build asserts its configuration instead of assuming it.
  *
@@ -86,12 +90,11 @@ if (problems.length > 0) {
   problems.forEach((problem) => console.error(`   - ${problem}`));
 
   console.error('');
-  console.error('  Set these in frontend/.env before building for release:');
+  console.error('  Set these as environment variables on the build host, or in');
+  console.error('  frontend/.env for a local release build:');
   console.error('');
   console.error('    VITE_API_BASE=https://breakpointsocial.com/wp-json/');
   console.error('    SITE_URL=https://breakpointsocial.com');
-  console.error('');
-  console.error('  Then put them back to the localhost values for local work.');
   console.error('');
 
   process.exit(1);
