@@ -48,7 +48,12 @@ function loadEnv() {
 
 loadEnv();
 
-const API_BASE = process.argv[2] ?? process.env.VITE_API_BASE ?? 'http://localhost:8887/index.php?rest_route=';
+const API_BASE = process.argv[2] ?? process.env.VITE_API_BASE;
+
+if (!API_BASE) {
+  console.error('prerender: VITE_API_BASE is not set. Add it to frontend/.env.');
+  process.exit(1);
+}
 
 function apiUrl(path) {
   return API_BASE.includes('rest_route=')

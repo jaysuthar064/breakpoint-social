@@ -7,8 +7,21 @@
  * from exactly the same data.
  */
 
-const API_BASE =
-  import.meta.env.VITE_API_BASE ?? 'http://localhost:8887/index.php?rest_route=';
+/*
+ * No silent fallback.
+ *
+ * A default of `http://localhost:8887` is invisible in development and fatal in
+ * production: the built site asks every visitor's browser for a server only the
+ * developer has. Missing configuration should be obvious at build time, not a
+ * blank page for real users.
+ */
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+if (!API_BASE) {
+  throw new Error(
+    'VITE_API_BASE is not set. Add it to frontend/.env (see DEPLOY-RUNBOOK.md).',
+  );
+}
 
 /**
  * Builds a REST URL that works with or without pretty permalinks.

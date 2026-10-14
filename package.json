@@ -8,7 +8,9 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr",
     "preview": "vite preview --host 127.0.0.1",
     "prerender": "node prerender.js",
-    "build:static": "npm run build && npm run prerender"
+    "build:static": "npm run build && npm run prerender",
+    "check:env": "node check-env.js",
+    "build:release": "node check-env.js && npm run build:static"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
