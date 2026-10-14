@@ -21,7 +21,34 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, 'dist');
 
-const API_BASE = process.argv[2] ?? 'http://localhost:8887/index.php?rest_route=';
+/**
+ * Reads .env.local / .env so `npm run prerender` uses the same configuration as
+ * the Vite build. Without this the client bundle and the prerendered HTML could
+ * be pointed at two different APIs and nobody would notice until production.
+ */
+function loadEnv() {
+  for (const name of ['.env.local', '.env']) {
+    const file = resolve(here, name);
+
+    if (!existsSync(file)) {
+      continue;
+    }
+
+    readFileSync(file, 'utf8')
+      .split(/\r?\n/)
+      .forEach((line) => {
+        const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/);
+
+        if (match && !process.env[match[1]]) {
+          process.env[match[1]] = match[2].replace(/^["']|["']$/g, '');
+        }
+      });
+  }
+}
+
+loadEnv();
+
+const API_BASE = process.argv[2] ?? process.env.VITE_API_BASE ?? 'http://localhost:8887/index.php?rest_route=';
 
 function apiUrl(path) {
   return API_BASE.includes('rest_route=')

@@ -1,1 +1,14 @@
+# Dependencies: reinstallable from package-lock.json, machine specific, and
+# 780+ files of noise in every diff.
+node_modules/
+
+# Local configuration. Holds the API URL for this machine.
+.env
+.env.local
+
+# Prerender's working copy of the built shell.
 .prerender-template.html
+
+# Build output is deliberately NOT ignored: this repo is deployed by pushing,
+# so dist/ has to travel with it. Rebuild with `npm run build:static` before
+# committing a release.
