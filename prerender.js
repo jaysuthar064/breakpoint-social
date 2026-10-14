@@ -101,8 +101,22 @@ async function main() {
   } catch (error) {
     // Failing loudly matters: silently shipping empty HTML is exactly the
     // outcome this step exists to prevent.
+    // Failing the build is deliberate. Shipping an empty shell is the exact
+    // outcome prerendering exists to prevent, so a deploy that cannot read the
+    // content must not succeed quietly.
+    console.error('');
     console.error(`prerender: could not reach the API (${error.message}).`);
     console.error(`prerender: tried ${apiUrl('/bps/v1/snapshot')}`);
+    console.error('');
+    console.error('  The build needs to read the site content to generate HTML.');
+    console.error('  Check, in order:');
+    console.error('   1. WordPress is live and that URL opens in a browser.');
+    console.error('   2. The Headless CMS plugin is active there.');
+    console.error('   3. VITE_API_BASE matches the permalink style:');
+    console.error('        pretty permalinks  https://example.com/wp-json/');
+    console.error('        plain permalinks   https://example.com/index.php?rest_route=');
+    console.error('   4. At least one page is published, or the snapshot is empty.');
+    console.error('');
     process.exit(1);
   }
 
