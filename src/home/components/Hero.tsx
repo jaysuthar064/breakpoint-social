@@ -1,12 +1,16 @@
 import React from 'react';
 import { ArrowDown, Sparkles, ShieldCheck, ChevronRight } from 'lucide-react';
 
+import { HOME_DEFAULTS } from '../content.js';
+
 interface HeroProps {
   onScrollToCampaigns: () => void;
   onSelectFeatured: () => void;
+  content?: any;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeatured }) => {
+export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeatured, content = HOME_DEFAULTS.hero }) => {
+  const trust = content.trust ?? [];
   return (
     <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 border-b border-[#84572f]/10">
       {/* Subtle brand ambient glow */}
@@ -24,30 +28,30 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
         {/* Editorial Eyebrow */}
         <div className="flex items-center gap-3 mb-6">
           <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#84572f]">
-            OUR WORK
+            {content.eyebrow}
           </span>
           <span className="h-px w-12 bg-[#84572f]/30" aria-hidden="true" />
           <span className="text-xs text-[#1c1c1c]/60 font-medium">
-            Portfolio &amp; Case Studies
+            {content.eyebrow_note}
           </span>
         </div>
 
         {/* Marquee Headline */}
         <div className="max-w-4xl">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#141615] tracking-tight leading-[1.08] font-display text-balance">
-            Creative Campaigns. <br />
+            {content.heading} <br />
             <span className="text-[#84572f] relative inline-block">
-              Real Impact.
+              {content.heading_accent}
               <span className="absolute left-0 bottom-1 w-full h-2 bg-[#f1d5a0]/60 -z-10 rounded-sm" />
             </span>
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-[#1c1c1c]/80 leading-relaxed font-normal max-w-2xl">
-            Explore the creative campaigns, influencer collaborations, and social strategies we’ve brought to life for our partners.
+            {content.subtext}
           </p>
 
           <p className="mt-2 text-sm text-[#84572f] font-script text-xl sm:text-2xl">
-            From perfection to personality — social movements, not just posts.
+            {content.script_line}
           </p>
         </div>
 
@@ -57,7 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
             onClick={onScrollToCampaigns}
             className="group px-7 py-3.5 text-xs uppercase tracking-wider font-semibold text-white bg-[#84572f] hover:bg-[#6c4625] rounded-full transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
           >
-            <span>Explore Our Work</span>
+            <span>{content.primary_label}</span>
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
           </button>
 
@@ -65,7 +69,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
             onClick={onSelectFeatured}
             className="px-6 py-3.5 text-xs uppercase tracking-wider font-semibold text-[#84572f] hover:text-[#141615] bg-[#92ada4]/15 hover:bg-[#92ada4]/25 border border-[#84572f]/20 rounded-full transition-all duration-200 flex items-center justify-center gap-2"
           >
-            <span>Featured Case Study</span>
+            <span>{content.secondary_label}</span>
             <ChevronRight className="w-4 h-4 text-[#84572f]" />
           </button>
         </div>
@@ -77,8 +81,8 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#141615]">Verified Campaign Data</p>
-              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">Strict adherence to verified client outcomes without fabricated vanity metrics.</p>
+              <p className="text-sm font-semibold text-[#141615]">{trust[0]?.title}</p>
+              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">{trust[0]?.body}</p>
             </div>
           </div>
 
@@ -87,8 +91,8 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#141615]">Creator-First Strategy</p>
-              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">Partnering with vetted tastemakers and cultural voices for authentic traction.</p>
+              <p className="text-sm font-semibold text-[#141615]">{trust[1]?.title}</p>
+              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">{trust[1]?.body}</p>
             </div>
           </div>
 
@@ -97,8 +101,8 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCampaigns, onSelectFeature
               <span className="font-bold text-xs">SD</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#141615]">San Diego Agency Roots</p>
-              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">Founded by Taylor and Nick with over two decades of combined social leadership.</p>
+              <p className="text-sm font-semibold text-[#141615]">{trust[2]?.title}</p>
+              <p className="text-xs text-[#1c1c1c]/70 mt-0.5">{trust[2]?.body}</p>
             </div>
           </div>
         </div>

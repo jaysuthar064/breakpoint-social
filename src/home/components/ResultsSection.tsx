@@ -1,61 +1,38 @@
 import React from 'react';
 import { Eye, Users, PlayCircle, HeartHandshake, Globe, Zap, ArrowRight, Sparkles } from 'lucide-react';
 
+import { HOME_DEFAULTS } from '../content.js';
+
 interface ResultsSectionProps {
   onOpenContact: () => void;
+  content?: any;
 }
 
-export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenContact }) => {
-  const stats = [
-    {
-      value: '1.3M+',
-      label: 'ORGANIC VIEWS',
-      context: 'in 30 days',
-      icon: Eye,
-      accent: 'from-[#f1d5a0]/30 to-[#84572f]/20',
-      badge: 'Total Reach'
-    },
-    {
-      value: '+631',
-      label: 'NEW FOLLOWERS',
-      context: 'in 30 days',
-      icon: Users,
-      accent: 'from-[#92ada4]/30 to-[#526840]/20',
-      badge: 'Audience Growth'
-    },
-    {
-      value: '139K+',
-      label: 'CONTENT VIEWS',
-      context: 'in 30 days',
-      icon: PlayCircle,
-      accent: 'from-[#f1d5a0]/30 to-[#84572f]/20',
-      badge: 'Consistent Volume'
-    },
-    {
-      value: '12K+',
-      label: 'INTERACTIONS',
-      context: 'in 30 days',
-      icon: HeartHandshake,
-      accent: 'from-[#92ada4]/30 to-[#526840]/20',
-      badge: 'High Engagement'
-    },
-    {
-      value: '89%',
-      label: 'NON-FOLLOWER VIEWS',
-      context: 'reaching new audiences',
-      icon: Globe,
-      accent: 'from-[#f1d5a0]/30 to-[#84572f]/20',
-      badge: 'Organic Discovery'
-    },
-    {
-      value: '57K+',
-      label: 'VIEWS',
-      context: 'on a single piece of content',
-      icon: Zap,
-      accent: 'from-[#84572f]/40 to-[#f1d5a0]/20',
-      badge: 'Viral Spike'
-    }
+export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenContact, content = HOME_DEFAULTS.results }) => {
+  /*
+   * The icon and the gradient stay here rather than in the CMS. An editor
+   * choosing a gradient per card is how a considered design turns into a
+   * ransom note, and the accent cycles with position anyway.
+   */
+  const ICONS: Record<string, any> = { Eye, Users, PlayCircle, HeartHandshake, Globe, Zap };
+
+  const ACCENTS = [
+    'from-[#f1d5a0]/30 to-[#84572f]/20',
+    'from-[#92ada4]/30 to-[#526840]/20',
+    'from-[#f1d5a0]/30 to-[#84572f]/20',
+    'from-[#92ada4]/30 to-[#526840]/20',
+    'from-[#f1d5a0]/30 to-[#84572f]/20',
+    'from-[#84572f]/40 to-[#f1d5a0]/20',
   ];
+
+  const stats = (content.stats ?? []).map((stat: any, idx: number) => ({
+    value: stat.value,
+    label: stat.label,
+    context: stat.context,
+    badge: stat.badge,
+    icon: ICONS[stat.icon] ?? Eye,
+    accent: ACCENTS[idx % ACCENTS.length],
+  }));
 
   return (
     <section id="results" className="py-20 md:py-28 bg-[#0e100f] text-white border-b border-white/10 relative overflow-hidden">
@@ -69,19 +46,19 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenContact })
         <div className="text-center max-w-3xl mx-auto mb-14 md:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-[#f1d5a0]/30 text-[#f1d5a0] text-xs font-mono font-semibold tracking-wider uppercase mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#f1d5a0]" />
-            <span>VERIFIED PERFORMANCE DATA</span>
+            <span>{content.badge}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight font-display">
-            RESULTS THAT SPEAK FOR THEMSELVES
+            {content.heading}
           </h2>
 
           <p className="mt-4 text-xl sm:text-2xl font-medium text-[#f1d5a0] font-body tracking-wide">
-            Real Content. Real Reach. Real Growth.
+            {content.tagline}
           </p>
 
           <p className="mt-2 text-sm sm:text-base text-white/70 max-w-xl mx-auto">
-            Selected results generated across Breakpoint Social client accounts.
+            {content.intro}
           </p>
         </div>
 
@@ -132,10 +109,10 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenContact })
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div className="max-w-2xl space-y-3">
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-tight">
-                We build content that gets brands noticed.
+                {content.callout_heading}
               </h3>
               <p className="text-sm sm:text-base text-white/80 leading-relaxed font-body">
-                From social strategy and content creation to influencer marketing, Breakpoint Social helps brands reach new audiences, build awareness, and turn attention into growth.
+                {content.callout_body}
               </p>
             </div>
 
@@ -144,7 +121,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenContact })
                 onClick={onOpenContact}
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#84572f] hover:bg-[#6c4625] text-white text-xs sm:text-sm uppercase tracking-wider font-bold transition-all shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer border border-[#f1d5a0]/30"
               >
-                <span>SEE WHAT BREAKPOINT CAN DO FOR YOUR BRAND</span>
+                <span>{content.callout_label}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

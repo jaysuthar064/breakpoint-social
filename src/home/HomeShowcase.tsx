@@ -10,7 +10,7 @@
  * without the site chrome. It also reads no CMS content, which means the
  * homepage still renders when the WordPress API is unreachable.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { FeaturedCampaign } from './components/FeaturedCampaign';
@@ -23,9 +23,14 @@ import { MediaLightbox } from './components/MediaLightbox';
 import { CampaignDetailModal } from './components/CampaignDetailModal';
 import { ContactModal } from './components/ContactModal';
 import { INITIAL_CAMPAIGNS } from './data/campaigns';
+import { homeContent } from './content.js';
 import { Campaign, CampaignMediaItem } from './types/campaign';
 
-export function HomeShowcase() {
+export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
+  // Editable copy: from the CMS where it is set, from the originals
+  // everywhere else, so a missing or unreachable CMS changes nothing.
+  const content = useMemo(() => homeContent(snapshot), [snapshot]);
+
   const [campaigns, setCampaigns] = useState<Campaign[]>(INITIAL_CAMPAIGNS);
   
   // Modals state
@@ -70,7 +75,7 @@ export function HomeShowcase() {
       {/* Top Announcement Bar */}
       <div className="bg-[#84572f] text-white text-[11px] py-1.5 px-4 text-center tracking-wider uppercase font-semibold flex items-center justify-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-[#f1d5a0] animate-pulse" />
-        <span>Breakpoint Social · San Diego Social Media Agency — Client Case Studies &amp; Campaign Showcase</span>
+        <span>{content.announcement.text}</span>
       </div>
 
       {/* Main Header */}
@@ -81,6 +86,7 @@ export function HomeShowcase() {
         <Hero 
           onScrollToCampaigns={handleScrollToCampaigns}
           onSelectFeatured={handleSelectFeatured}
+          content={content.hero}
         />
 
         {/* Section 02: Featured Campaign (Lo Lo Estrin Fe with Serena Pitt) */}
@@ -92,7 +98,7 @@ export function HomeShowcase() {
         />
 
         {/* Section 03: Verified Client Results & Performance Metrics */}
-        <ResultsSection onOpenContact={() => setIsContactOpen(true)} />
+        <ResultsSection onOpenContact={() => setIsContactOpen(true)} content={content.results} />
 
         {/* Section 04: Dedicated Instagram Reels Showcase Grid */}
         <InstagramReelsGrid
@@ -106,7 +112,7 @@ export function HomeShowcase() {
         />
 
         {/* Section 05: Final CTA */}
-        <FinalCTA onOpenContact={() => setIsContactOpen(true)} />
+        <FinalCTA onOpenContact={() => setIsContactOpen(true)} content={content.cta} />
       </main>
 
       {/* Footer */}

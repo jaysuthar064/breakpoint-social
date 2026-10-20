@@ -91,7 +91,9 @@ function Routes({ provided }) {
   }, [snapshot]);
 
   if (path === '/') {
-    return <HomeShowcase />;
+    // The snapshot is passed when it happens to be there, and the homepage
+    // falls back to its own copy when it is not.
+    return <HomeShowcase snapshot={snapshot} />;
   }
 
   if (error) {
