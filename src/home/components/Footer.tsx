@@ -18,13 +18,13 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand & Bio */}
           <div className="lg:col-span-2 space-y-4">
             <a 
-              href="https://breakpointsocial.com/"
+              href="/"
               className="inline-block group"
               aria-label="Breakpoint Social Home"
             >
               {logoLoaded ? (
                 <img 
-                  src="https://breakpointsocial.com/wp-content/uploads/2025/04/breakpoint-logo-updated.png" 
+                  src="/images/breakpoint-logo.png" 
                   alt="Breakpoint Social Logo" 
                   className="h-10 w-auto object-contain brightness-0 invert opacity-95 transition-opacity group-hover:opacity-100"
                   onError={() => setLogoLoaded(false)}
@@ -84,22 +84,22 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-xs text-neutral-400">
               <li>
-                <a href="https://breakpointsocial.com/" className="hover:text-[#f1d5a0] transition-colors">Home</a>
+                <a href="/" className="hover:text-[#f1d5a0] transition-colors">Home</a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/about-us/" className="hover:text-[#f1d5a0] transition-colors">About Us</a>
+                <a href="/about-us/" className="hover:text-[#f1d5a0] transition-colors">About Us</a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/services/" className="hover:text-[#f1d5a0] transition-colors">Services</a>
+                <a href="/services/" className="hover:text-[#f1d5a0] transition-colors">Services</a>
               </li>
               <li>
                 <a href="#case-studies" className="text-[#f1d5a0] font-semibold hover:underline">Our Work (Portfolio)</a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/testimonials/" className="hover:text-[#f1d5a0] transition-colors">Testimonials</a>
+                <a href="/testimonials/" className="hover:text-[#f1d5a0] transition-colors">Testimonials</a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/blog/" className="hover:text-[#f1d5a0] transition-colors">Blog</a>
+                <a href="/blog/" className="hover:text-[#f1d5a0] transition-colors">Blog</a>
               </li>
             </ul>
           </div>
@@ -111,27 +111,27 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-xs text-neutral-400">
               <li>
-                <a href="https://breakpointsocial.com/services/#Social_Media_Management" className="hover:text-[#f1d5a0] transition-colors">
+                <a href="/services/#Social_Media_Management" className="hover:text-[#f1d5a0] transition-colors">
                   Social Media Management
                 </a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/services/#Creative_Production" className="hover:text-[#f1d5a0] transition-colors">
+                <a href="/services/#Creative_Production" className="hover:text-[#f1d5a0] transition-colors">
                   Creative Production
                 </a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/services/#Brand_Development_Positioning" className="hover:text-[#f1d5a0] transition-colors">
+                <a href="/services/#Brand_Development_Positioning" className="hover:text-[#f1d5a0] transition-colors">
                   Brand Development
                 </a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/services/#Event_Marketing" className="hover:text-[#f1d5a0] transition-colors">
+                <a href="/services/#Event_Marketing" className="hover:text-[#f1d5a0] transition-colors">
                   Event Marketing
                 </a>
               </li>
               <li>
-                <a href="https://breakpointsocial.com/services/#Campaign_Reporting_Insights" className="hover:text-[#f1d5a0] transition-colors">
+                <a href="/services/#Campaign_Reporting_Insights" className="hover:text-[#f1d5a0] transition-colors">
                   Campaign Insights
                 </a>
               </li>

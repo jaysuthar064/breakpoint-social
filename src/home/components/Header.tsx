@@ -17,13 +17,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
           {/* Zone 1: Single text element wordmark / Brand logo */}
           <div className="flex items-center">
             <a 
-              href="https://breakpointsocial.com/"
+              href="/"
               className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-[#84572f]"
               aria-label="Breakpoint Social Home"
             >
               {logoLoaded ? (
                 <img 
-                  src="https://breakpointsocial.com/wp-content/uploads/2025/04/breakpoint-logo-updated.png" 
+                  src="/images/breakpoint-logo.png" 
                   alt="Breakpoint Social Logo" 
                   className="h-10 w-auto object-contain transition-transform group-hover:scale-102"
                   onError={() => setLogoLoaded(false)}
@@ -44,19 +44,19 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
           {/* Zone 2: 4-6 clean text navigation links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#1c1c1c]/80">
             <a 
-              href="https://breakpointsocial.com/" 
+              href="/" 
               className="hover:text-[#84572f] transition-colors"
             >
               Home
             </a>
             <a 
-              href="https://breakpointsocial.com/about-us/" 
+              href="/about-us/" 
               className="hover:text-[#84572f] transition-colors"
             >
               About Us
             </a>
             <a 
-              href="https://breakpointsocial.com/services/" 
+              href="/services/" 
               className="hover:text-[#84572f] transition-colors"
             >
               Services
@@ -70,13 +70,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
               <span className="w-1.5 h-1.5 rounded-full bg-[#84572f]" aria-hidden="true" />
             </a>
             <a 
-              href="https://breakpointsocial.com/testimonials/" 
+              href="/testimonials/" 
               className="hover:text-[#84572f] transition-colors"
             >
               Testimonials
             </a>
             <a 
-              href="https://breakpointsocial.com/blog/" 
+              href="/blog/" 
               className="hover:text-[#84572f] transition-colors"
             >
               Blog
@@ -113,21 +113,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#fcf5e9] border-b border-[#84572f]/15 px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
           <a
-            href="https://breakpointsocial.com/"
+            href="/"
             className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
             onClick={() => setMobileMenuOpen(false)}
           >
             Home
           </a>
           <a
-            href="https://breakpointsocial.com/about-us/"
+            href="/about-us/"
             className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
             onClick={() => setMobileMenuOpen(false)}
           >
             About Us
           </a>
           <a
-            href="https://breakpointsocial.com/services/"
+            href="/services/"
             className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
             onClick={() => setMobileMenuOpen(false)}
           >
@@ -141,14 +141,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
             Our Work (Case Studies)
           </a>
           <a
-            href="https://breakpointsocial.com/testimonials/"
+            href="/testimonials/"
             className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
             onClick={() => setMobileMenuOpen(false)}
           >
             Testimonials
           </a>
           <a
-            href="https://breakpointsocial.com/blog/"
+            href="/blog/"
             className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
             onClick={() => setMobileMenuOpen(false)}
           >

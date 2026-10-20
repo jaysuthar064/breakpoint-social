@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { withViewTransition } from './motion.js';
 
@@ -47,6 +47,74 @@ export function RouterProvider({ children, initialPath = '/' }) {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
+  /*
+   * Catches internal links that are plain anchors rather than <Link/>.
+   *
+   * The homepage was ported from a standalone app and its nav is ordinary
+   * <a href="/services/">. Rewriting all of it into <Link/> would mean editing
+   * markup that has to stay identical to the original, so the router meets it
+   * halfway and intercepts the click here instead. Anything that is not a
+   * plain left-click on a same-origin document link is left entirely alone.
+   */
+  useEffect(() => {
+    const onClick = (event) => {
+      if (event.defaultPrevented || event.button !== 0) {
+        return;
+      }
+
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+
+      const anchor = event.target.closest?.('a');
+
+      if (!anchor || !anchor.href) {
+        return;
+      }
+
+      // Opt-outs an author can rely on, and the schemes that are never routes.
+      if (anchor.target && anchor.target !== '_self') {
+        return;
+      }
+
+      if (anchor.hasAttribute('download') || anchor.dataset.noRouter !== undefined) {
+        return;
+      }
+
+      const url = new URL(anchor.href, window.location.href);
+
+      if (url.origin !== window.location.origin) {
+        return;
+      }
+
+      // A fragment on the current page is the browser's job, not ours.
+      if (url.pathname === window.location.pathname && url.hash) {
+        return;
+      }
+
+      // Anything that is not a document -- /videos/x.mp4, a PDF -- must load
+      // normally rather than be handed to the router as a route.
+      if (/\.[a-z0-9]{2,5}$/i.test(url.pathname)) {
+        return;
+      }
+
+      event.preventDefault();
+      navigateRef.current(url.pathname);
+
+      if (url.hash) {
+        requestAnimationFrame(() => {
+          document.getElementById(url.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+    };
+
+    document.addEventListener('click', onClick);
+
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
+  const navigateRef = useRef(null);
+
   const navigate = useCallback((to, { replace = false } = {}) => {
     const target = normalise(to);
 
@@ -64,6 +132,8 @@ export function RouterProvider({ children, initialPath = '/' }) {
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
   }, []);
+
+  navigateRef.current = navigate;
 
   const value = useMemo(() => ({ path, navigate }), [path, navigate]);
 

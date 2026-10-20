@@ -49,7 +49,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onOpenContact }) => {
           </button>
 
           <a
-            href="https://breakpointsocial.com/contact-us/"
+            href="/contact-us/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-7 py-4 text-xs uppercase tracking-wider font-semibold text-white/90 hover:text-white border border-white/20 hover:border-white/40 rounded-full transition-all flex items-center justify-center gap-2"
