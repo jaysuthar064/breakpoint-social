@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 
+/* Used only before the CMS has published any pages. */
+const FALLBACK_NAV = [
+  { id: 'home', label: 'Home', path: '/' },
+  { id: 'about', label: 'About Us', path: '/about-us/' },
+  { id: 'services', label: 'Services', path: '/services/' },
+  { id: 'work', label: 'Our Work', path: '/our-work/' },
+  { id: 'testimonials', label: 'Testimonials', path: '/testimonials/' },
+  { id: 'blog', label: 'Blog', path: '/blog/' },
+  { id: 'contact', label: 'Contact Us', path: '/contact-us/' },
+];
+
 interface HeaderProps {
   onOpenContact: () => void;
+  nav?: Array<{ id: string | number; label: string; path: string }>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
+export const Header: React.FC<HeaderProps> = ({ onOpenContact, nav }) => {
+  /*
+   * The pages the CMS publishes, so this header and the one on every other
+   * page cannot disagree about what the site contains. The hand-written list
+   * this replaced had drifted already: no Our Work, no Contact Us, and an
+   * on-page anchor where the Our Work page should have been.
+   */
+  const items = nav && nav.length > 0 ? nav : FALLBACK_NAV;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(true);
 
@@ -43,44 +62,27 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
 
           {/* Zone 2: 4-6 clean text navigation links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#1c1c1c]/80">
-            <a 
-              href="/" 
-              className="hover:text-[#84572f] transition-colors"
-            >
-              Home
-            </a>
-            <a 
-              href="/about-us/" 
-              className="hover:text-[#84572f] transition-colors"
-            >
-              About Us
-            </a>
-            <a 
-              href="/services/" 
-              className="hover:text-[#84572f] transition-colors"
-            >
-              Services
-            </a>
-            <a 
-              href="#case-studies" 
-              className="text-[#84572f] font-semibold flex items-center gap-1.5 transition-colors"
-              aria-current="page"
-            >
-              <span>Our Work</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#84572f]" aria-hidden="true" />
-            </a>
-            <a 
-              href="/testimonials/" 
-              className="hover:text-[#84572f] transition-colors"
-            >
-              Testimonials
-            </a>
-            <a 
-              href="/blog/" 
-              className="hover:text-[#84572f] transition-colors"
-            >
-              Blog
-            </a>
+            {items.map((item) =>
+              item.path === '/' ? (
+                <a
+                  key={item.id}
+                  href={item.path}
+                  className="text-[#84572f] font-semibold flex items-center gap-1.5 transition-colors"
+                  aria-current="page"
+                >
+                  <span>{item.label}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#84572f]" aria-hidden="true" />
+                </a>
+              ) : (
+                <a
+                  key={item.id}
+                  href={item.path}
+                  className="hover:text-[#84572f] transition-colors"
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
           </nav>
 
           {/* Zone 3: 1-2 primary actions */}
@@ -112,48 +114,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#fcf5e9] border-b border-[#84572f]/15 px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
-          <a
-            href="/"
-            className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Home
-          </a>
-          <a
-            href="/about-us/"
-            className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            About Us
-          </a>
-          <a
-            href="/services/"
-            className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Services
-          </a>
-          <a
-            href="#case-studies"
-            className="block px-3 py-2 text-base font-semibold text-[#84572f] bg-[#f1d5a0]/30 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Our Work (Case Studies)
-          </a>
-          <a
-            href="/testimonials/"
-            className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Testimonials
-          </a>
-          <a
-            href="/blog/"
-            className="block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Blog
-          </a>
+          {items.map((item) => (
+            <a
+              key={item.id}
+              href={item.path}
+              className={
+                item.path === '/'
+                  ? 'block px-3 py-2 text-base font-semibold text-[#84572f] bg-[#f1d5a0]/30 rounded-lg'
+                  : 'block px-3 py-2 text-base font-medium text-[#1c1c1c] hover:bg-[#92ada4]/15 rounded-lg'
+              }
+              aria-current={item.path === '/' ? 'page' : undefined}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.label}
+            </a>
+          ))}
           <div className="pt-2">
             <button
               onClick={() => {

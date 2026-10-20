@@ -24,6 +24,7 @@ import { CampaignDetailModal } from './components/CampaignDetailModal';
 import { ContactModal } from './components/ContactModal';
 import { INITIAL_CAMPAIGNS } from './data/campaigns';
 import { homeContent } from './content.js';
+import { buildHomeNav } from '../lib/nav.js';
 import { campaignsFromCms } from './campaigns-from-cms.js';
 import { reelsFromCms } from './reels-from-cms.js';
 import { Campaign, CampaignMediaItem } from './types/campaign';
@@ -49,6 +50,10 @@ export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
   }
 
   const reels = useMemo(() => reelsFromCms(snapshot), [snapshot]);
+
+  // The same pages the rest of the site lists, so the two headers cannot
+  // disagree about what the site contains.
+  const nav = useMemo(() => buildHomeNav(snapshot), [snapshot]);
   
   // Modals state
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -96,7 +101,7 @@ export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
       </div>
 
       {/* Main Header */}
-      <Header onOpenContact={() => setIsContactOpen(true)} />
+      <Header onOpenContact={() => setIsContactOpen(true)} nav={nav} />
 
       <main className="flex-1">
         {/* Section 01: Hero */}

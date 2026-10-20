@@ -4,6 +4,7 @@ import { cacheSnapshot, fetchSnapshot, readCachedSnapshot } from './lib/api.js';
 import { fixHeadingLevels } from './lib/headings.js';
 import { initMagnetic, supportsScrollTimeline } from './lib/motion.js';
 import { initReveal } from './lib/reveal.js';
+import { buildNav } from './lib/nav.js';
 import { Link, RouterProvider, useRouter } from './lib/router.jsx';
 import { Footer, Header, SkipLink } from './components/Chrome.jsx';
 import { Loading } from './components/Loading.jsx';
@@ -168,19 +169,6 @@ function Site({ snapshot, fromNetwork = false }) {
       <Footer nav={nav} branding={snapshot.settings} />
     </>
   );
-}
-
-/**
- * Nav entries, in the order the editor arranged the pages.
- */
-function buildNav(snapshot) {
-  return Object.values(snapshot.pages ?? {})
-    .filter((page) => page.route !== '')
-    .map((page) => ({
-      id: page.id,
-      label: page.title,
-      path: `/${page.route}/`,
-    }));
 }
 
 /**
