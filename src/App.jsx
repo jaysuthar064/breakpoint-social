@@ -10,6 +10,7 @@ import { Loading } from './components/Loading.jsx';
 import { ContactForm } from './components/ContactForm.jsx';
 import { CaseStudy } from './components/CaseStudy.jsx';
 import { SECTION_COMPONENTS } from './components/sections.jsx';
+import { HomeShowcase } from './home/HomeShowcase.tsx';
 
 /**
  * The public site.
@@ -22,6 +23,10 @@ import { SECTION_COMPONENTS } from './components/sections.jsx';
 /**
  * Reads the snapshot the prerender step inlined, if there is one.
  */
+const HOME_TITLE = 'Breakpoint Social | San Diego Social Media Agency';
+const HOME_DESCRIPTION =
+  "Explore Breakpoint Social's creative campaigns, influencer collaborations, and social media marketing work.";
+
 function initialSnapshot() {
   if (typeof window === 'undefined') {
     return null;
@@ -34,8 +39,35 @@ function initialSnapshot() {
 }
 
 export default function App({ snapshot: provided, initialPath = '/' }) {
+  return (
+    <RouterProvider initialPath={initialPath}>
+      <Routes provided={provided} />
+    </RouterProvider>
+  );
+}
+
+/**
+ * Picks between the homepage and the CMS-driven rest of the site.
+ *
+ * The homepage is the senior's standalone React page: it carries its own
+ * header and footer and reads nothing from the CMS, so it renders without the
+ * site chrome and without waiting on the API. Everything else needs the
+ * snapshot, so only those routes gate on it.
+ */
+function Routes({ provided }) {
+  const { path } = useRouter();
   const [snapshot, setSnapshot] = useState(() => provided ?? initialSnapshot());
   const [error, setError] = useState(null);
+
+  // The homepage renders without <Site/>, which is where the per-route title
+  // effect lives. Without this, navigating from /about/ back to / would leave
+  // the document titled "About".
+  useEffect(() => {
+    if (path === '/' && typeof document !== 'undefined') {
+      document.title = HOME_TITLE;
+      setMeta('description', HOME_DESCRIPTION);
+    }
+  }, [path]);
 
   useEffect(() => {
     if (snapshot) {
@@ -57,6 +89,10 @@ export default function App({ snapshot: provided, initialPath = '/' }) {
 
     return () => controller.abort();
   }, [snapshot]);
+
+  if (path === '/') {
+    return <HomeShowcase />;
+  }
 
   if (error) {
     return (
@@ -83,13 +119,9 @@ export default function App({ snapshot: provided, initialPath = '/' }) {
     return <Loading />;
   }
 
-  return (
-    <RouterProvider initialPath={initialPath}>
-      {/* `fromNetwork` is false when the payload was already inline, so a
-          prerendered page never fades: it is correct from the first frame. */}
-      <Site snapshot={snapshot} fromNetwork={!provided && !initialSnapshot()} />
-    </RouterProvider>
-  );
+  /* `fromNetwork` is false when the payload was already inline, so a
+     prerendered page never fades: it is correct from the first frame. */
+  return <Site snapshot={snapshot} fromNetwork={!provided && !initialSnapshot()} />;
 }
 
 function Site({ snapshot, fromNetwork = false }) {

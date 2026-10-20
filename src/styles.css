@@ -424,3 +424,26 @@
     }
   }
 }
+
+/*
+ * Custom scrollbar, from the homepage app this site's home route was ported
+ * from. Global rather than scoped: a scrollbar that changes colour as you move
+ * between pages reads as a glitch.
+ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-pale);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sage);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-clay);
+}
