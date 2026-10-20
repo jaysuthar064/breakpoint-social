@@ -24,6 +24,8 @@ import { CampaignDetailModal } from './components/CampaignDetailModal';
 import { ContactModal } from './components/ContactModal';
 import { INITIAL_CAMPAIGNS } from './data/campaigns';
 import { homeContent } from './content.js';
+import { campaignsFromCms } from './campaigns-from-cms.js';
+import { reelsFromCms } from './reels-from-cms.js';
 import { Campaign, CampaignMediaItem } from './types/campaign';
 
 export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
@@ -31,7 +33,22 @@ export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
   // everywhere else, so a missing or unreachable CMS changes nothing.
   const content = useMemo(() => homeContent(snapshot), [snapshot]);
 
-  const [campaigns, setCampaigns] = useState<Campaign[]>(INITIAL_CAMPAIGNS);
+  // CMS campaigns win when there are any; the bundled data is what the page
+  // shows before anything has been imported.
+  const fromCms = useMemo(() => campaignsFromCms(snapshot), [snapshot]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>(fromCms ?? INITIAL_CAMPAIGNS);
+
+  // A later snapshot (the first client-side fetch) has to replace the
+  // placeholder data, but must not discard edits made in the lightbox since.
+  const [cmsKey, setCmsKey] = useState<string | null>(null);
+  const nextKey = fromCms ? fromCms.map((c) => c.id).join(',') : null;
+
+  if (nextKey !== cmsKey && fromCms) {
+    setCmsKey(nextKey);
+    setCampaigns(fromCms);
+  }
+
+  const reels = useMemo(() => reelsFromCms(snapshot), [snapshot]);
   
   // Modals state
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -103,6 +120,7 @@ export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
         {/* Section 04: Dedicated Instagram Reels Showcase Grid */}
         <InstagramReelsGrid
           onOpenLightbox={(media) => setLightboxMedia(media)}
+          reels={reels}
         />
 
         {/* Section 04: Campaign Showcase & Additional Case Studies */}

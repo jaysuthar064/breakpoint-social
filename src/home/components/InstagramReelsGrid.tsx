@@ -5,16 +5,21 @@ import { CampaignMediaItem } from '../types/campaign';
 
 interface InstagramReelsGridProps {
   onOpenLightbox: (media: CampaignMediaItem) => void;
+  reels?: InstagramReelItem[] | null;
 }
 
-export const InstagramReelsGrid: React.FC<InstagramReelsGridProps> = ({ onOpenLightbox }) => {
+export const InstagramReelsGrid: React.FC<InstagramReelsGridProps> = ({ onOpenLightbox, reels }) => {
   const [filter, setFilter] = useState<string>('All Work');
+
+  // Derived from the CMS campaigns when there are any, so the same video is
+  // not described in two places that can disagree.
+  const allReels = reels ?? INSTAGRAM_REELS_LIST;
 
   const categories = ['All Work', 'Creative Production', 'Social Media Management', 'Brand Development & Positioning', 'Event Marketing'];
 
   const filteredReels = filter === 'All Work'
-    ? INSTAGRAM_REELS_LIST
-    : INSTAGRAM_REELS_LIST.filter(r => r.category === filter);
+    ? allReels
+    : allReels.filter(r => r.category === filter);
 
   const handleOpenMedia = (reel: InstagramReelItem) => {
     const mediaItem: CampaignMediaItem = {
@@ -49,7 +54,7 @@ export const InstagramReelsGrid: React.FC<InstagramReelsGridProps> = ({ onOpenLi
               </span>
               <span className="text-xs text-white/40">·</span>
               <span className="text-xs text-white/80 font-mono bg-white/10 px-2.5 py-0.5 rounded-full border border-white/15">
-                {INSTAGRAM_REELS_LIST.length} Video Deliverables
+                {allReels.length} Video Deliverables
               </span>
             </div>
 
@@ -58,7 +63,7 @@ export const InstagramReelsGrid: React.FC<InstagramReelsGridProps> = ({ onOpenLi
             </h2>
 
             <p className="mt-4 text-base sm:text-lg text-white/80 leading-relaxed">
-              Explore {INSTAGRAM_REELS_LIST.length} vertical short-form video deliverables created and produced by Breakpoint Social. Click any deliverable for instant playback.
+              Explore {allReels.length} vertical short-form video deliverables created and produced by Breakpoint Social. Click any deliverable for instant playback.
             </p>
           </div>
         </div>
@@ -77,7 +82,7 @@ export const InstagramReelsGrid: React.FC<InstagramReelsGridProps> = ({ onOpenLi
                     : 'bg-white/5 text-white/70 hover:bg-white/15 hover:text-white border border-white/10'
                 }`}
               >
-                {cat} {cat === 'All Work' ? `(${INSTAGRAM_REELS_LIST.length})` : ''}
+                {cat} {cat === 'All Work' ? `(${allReels.length})` : ''}
               </button>
             );
           })}
