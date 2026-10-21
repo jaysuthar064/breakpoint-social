@@ -11,3 +11,8 @@ node_modules/
 dist/
 dist-ssr/
 .prerender-template.html
+
+# Campaign videos: 239MB across 36 files. Too large for git and for a Vercel
+# deploy, so they are served from wherever VITE_VIDEO_BASE points. The source
+# files live in ../assets/videos.
+public/videos/

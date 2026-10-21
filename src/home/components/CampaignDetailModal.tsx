@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { X, ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, ShieldAlert, Sparkles, ExternalLink, Play } from 'lucide-react';
 import { Campaign, CampaignMediaItem } from '../types/campaign';
+import { videoSrc } from '../media.js';
 
 interface CampaignDetailModalProps {
   campaign: Campaign | null;
@@ -186,7 +187,7 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
                       ) : isVideo && media.src ? (
                         <>
                           <video
-                            src={media.src}
+                            src={videoSrc(media.src)}
                             poster={media.poster}
                             muted
                             playsInline

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Maximize2, Volume2, VolumeX, Eye, ExternalLink } from 'lucide-react';
 import { Campaign, CampaignMediaItem } from '../types/campaign';
+import { videoSrc } from '../media.js';
 
 interface FeaturedCampaignProps {
   campaign: Campaign;
@@ -94,7 +95,7 @@ const CreativeExampleCard: React.FC<{
           <>
             <video
               ref={videoRef}
-              src={customSrc}
+              src={videoSrc(customSrc)}
               poster={item.poster || item.posterUrl}
               playsInline
               loop
