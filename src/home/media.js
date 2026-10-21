@@ -21,9 +21,14 @@ const BASE = String(import.meta.env.VITE_VIDEO_BASE ?? '').replace(/\/+$/, '');
 /**
  * The URL a <video> should actually load.
  *
+ * Deliberately not called `videoSrc`: MediaLightbox already has a local
+ * `const videoSrc`, and an import of the same name is shadowed by it. Calls
+ * made before that line then hit its temporal dead zone and throw, which takes
+ * the whole page down with a blank screen rather than a broken player.
+ *
  * @param {string} path Stored path, or an absolute URL.
  */
-export function videoSrc(path) {
+export function resolveVideoSrc(path) {
   const value = String(path ?? '').trim();
 
   if (value === '') {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { X, Sparkles, Film, CheckCircle, TrendingUp, BarChart3 } from 'lucide-react';
 import { CampaignMediaItem } from '../types/campaign';
-import { videoSrc } from '../media.js';
+import { resolveVideoSrc } from '../media.js';
 
 interface MediaLightboxProps {
   media: CampaignMediaItem | null;
@@ -45,15 +45,15 @@ export const MediaLightbox: React.FC<MediaLightboxProps> = ({ media, onClose }) 
   // Resolve direct video asset URL - NEVER fall back to Instagram embed/iframe
   const resolveVideoUrl = (): string => {
     if (media.videoUrl && media.videoUrl.endsWith('.mp4')) {
-      return videoSrc(media.videoUrl);
+      return resolveVideoSrc(media.videoUrl);
     }
     if (media.src && media.src.endsWith('.mp4')) {
-      return videoSrc(media.src);
+      return resolveVideoSrc(media.src);
     }
     if (detectedCode) {
-      return videoSrc(`/videos/${detectedCode}.mp4`);
+      return resolveVideoSrc(`/videos/${detectedCode}.mp4`);
     }
-    return videoSrc(media.videoUrl || media.src || '');
+    return resolveVideoSrc(media.videoUrl || media.src || '');
   };
 
   // Resolve direct poster thumbnail URL
