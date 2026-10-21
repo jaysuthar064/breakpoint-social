@@ -35,18 +35,29 @@ function toMediaItem(row, campaignId, index) {
     }
   }
 
+  const video = row.videoUrl || '';
+
   return {
     id: `${campaignId}-media-${index}`,
-    type: row.videoUrl ? 'video' : 'image',
+    type: video ? 'video' : 'image',
     title: row.title ?? '',
     aspectRatio: row.aspectRatio || '9:16',
-    src: poster,
-    videoUrl: row.videoUrl || undefined,
+    // `src` is the thing that plays, not the still. The detail modal feeds it
+    // straight into <video src>, so a poster here gives a player that loads
+    // nothing and sits at 0:00 forever.
+    src: video || poster,
+    videoUrl: video || undefined,
     posterUrl: poster,
     poster,
     talent: row.talent || undefined,
     format: row.format || undefined,
     description: row.description || undefined,
+    // The cards label each item "Creative Example 0N" and print the creator
+    // beside it. Both are positional in the original data, so they are derived
+    // rather than stored.
+    exampleNumber: index + 1,
+    collaborator: row.talent || undefined,
+    caption: row.description || undefined,
     externalUrl: row.externalUrl || undefined,
     analytics: Object.keys(analytics).length > 0 ? analytics : undefined,
   };
