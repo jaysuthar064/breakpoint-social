@@ -80,34 +80,51 @@ export function Header({ nav, branding }) {
           )}
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+        {/*
+          Matched to the homepage header: same spacing, same weight, same
+          treatment for the current page. The two used to differ in gap, in
+          type size and in the CTA's wording, which read as two sites.
+        */}
+        <nav
+          aria-label="Main"
+          className="hidden items-center gap-8 text-sm font-medium text-[#1c1c1c]/80 lg:flex"
+        >
           {items.map((item) => {
             const current = path === item.path;
 
-            return (
+            return current ? (
               <Link
                 key={item.id}
                 to={item.path}
-                aria-current={current ? 'page' : undefined}
-                className={[
-                  'rounded-full px-3.5 py-2 text-sm transition-colors duration-200',
-                  current
-                    ? 'font-semibold text-[#84572f]'
-                    : 'text-[#141615]/75 hover:text-[#84572f]',
-                ].join(' ')}
+                aria-current="page"
+                className="flex items-center gap-1.5 font-semibold text-[#84572f] transition-colors"
+              >
+                <span>{item.label}</span>
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-[#84572f]"
+                  aria-hidden="true"
+                />
+              </Link>
+            ) : (
+              <Link
+                key={item.id}
+                to={item.path}
+                className="transition-colors hover:text-[#84572f]"
               >
                 {item.label}
               </Link>
             );
           })}
+        </nav>
 
+        <div className="hidden items-center gap-4 sm:flex">
           <Link
             to="/contact-us/"
-            className="ml-2 inline-flex items-center rounded-full bg-[#84572f] px-5 py-2.5 text-xs font-semibold tracking-wider text-white uppercase transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#6c4625]"
+            className="inline-flex items-center rounded-full bg-[#84572f] px-5 py-2.5 text-xs font-semibold tracking-wider whitespace-nowrap text-white uppercase shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#6c4625] hover:shadow focus-visible:outline-2 focus-visible:outline-[#84572f]"
           >
-            Get in touch
+            Let&rsquo;s Work Together
           </Link>
-        </nav>
+        </div>
 
         <button
           type="button"
@@ -156,11 +173,16 @@ export function Header({ nav, branding }) {
 export function Footer({ nav, branding }) {
   const items = nav ?? [];
 
+  /*
+   * Matched to the homepage footer: black rather than near-black, the same top
+   * rule and vertical rhythm, and a five-column grid so the brand column keeps
+   * its width as the link columns grow.
+   */
   return (
-    <footer className="bg-[#141615] text-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 border-b border-neutral-800 pb-16 md:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
+    <footer className="border-t border-neutral-800 bg-black pt-20 pb-12 text-[#f6f8f5]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 border-b border-neutral-800 pb-16 md:grid-cols-2 lg:grid-cols-5">
+          <div className="space-y-4 lg:col-span-2">
             {branding?.logo?.url ? (
               <img
                 src={branding.logoDark?.url ?? branding.logo.url}
@@ -184,19 +206,24 @@ export function Footer({ nav, branding }) {
               spark movements, not just posts.
             </p>
 
-            <ul className="mt-6 flex gap-4">
+            <ul className="mt-6 flex gap-3">
               {SOCIAL.map((social) => (
                 <li key={social.label}>
                   <a
                     href={social.href}
                     rel="noopener noreferrer"
                     target="_blank"
-                    className="text-sm text-white/70 underline-offset-4 transition-colors hover:text-[#f1d5a0] hover:underline"
+                    /* 36px is under the 44px touch floor, so the row gets
+                       extra padding on small screens rather than shrinking
+                       the target. */
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-800 bg-neutral-900 text-xs font-bold text-neutral-300 transition-all hover:border-[#84572f] hover:bg-[#84572f] hover:text-white"
                   >
-                    {social.label}
+                    {social.label.slice(0, 2)}
                     {/* A link that opens a new tab should say so: sighted users
                         see it happen, screen reader users get no cue. */}
-                    <span className="sr-only"> (opens in a new window)</span>
+                    <span className="sr-only">
+                      {social.label} (opens in a new window)
+                    </span>
                   </a>
                 </li>
               ))}
