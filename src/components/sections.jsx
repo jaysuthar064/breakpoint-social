@@ -175,11 +175,13 @@ function Hero({ section }) {
   /*
    * The homepage's hero, applied to every page.
    *
-   * Left-aligned rather than centred, because the homepage is and a centred
-   * heading beside a left-aligned one reads as a different site. The second
-   * headline line carries the sand highlight; the eyebrow gets its rule and
-   * note. Each of those is optional, so a page that only ever had a heading
-   * still renders as one clean line.
+   * Centred, unlike the homepage's left-aligned one: an inner page is a
+   * single column of content, and a centred heading sits over it better than
+   * one anchored to the left edge of a wide container.
+   *
+   * Everything else is the homepage's: the ambient wash, the eyebrow rule, and
+   * the sand highlight behind the second headline line. Each is optional, so a
+   * page that only ever had a heading still renders as one clean line.
    */
   return (
     <section
@@ -197,9 +199,12 @@ function Hero({ section }) {
         aria-hidden="true"
       />
 
-      <div data-reveal className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div
+        data-reveal
+        className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8"
+      >
         {fields.eyebrow && (
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-6 flex items-center justify-center gap-3">
             <span
               className={`text-xs font-bold tracking-[0.25em] uppercase ${
                 dark ? 'text-[#f1d5a0]' : 'text-[#84572f]'
@@ -224,7 +229,7 @@ function Hero({ section }) {
           </div>
         )}
 
-        <div className="max-w-4xl">
+        <div className="mx-auto max-w-4xl">
           <h1
             className={`font-display text-4xl leading-[1.08] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl ${
               dark ? 'text-white' : 'text-[#141615]'
@@ -257,7 +262,7 @@ function Hero({ section }) {
 
           {fields.subtext && (
             <p
-              className={`mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl ${
+              className={`mx-auto mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl ${
                 dark ? 'text-white/80' : 'text-[#1c1c1c]/80'
               }`}
             >
@@ -277,7 +282,7 @@ function Hero({ section }) {
         </div>
 
         {(fields.primary_cta || fields.secondary_cta) && (
-          <div className="mt-10 flex flex-col items-stretch gap-4 pt-4 sm:flex-row sm:items-center sm:gap-6">
+          <div className="mt-10 flex flex-col items-stretch justify-center gap-4 pt-4 sm:flex-row sm:items-center sm:gap-6">
             {fields.primary_cta && (
               <Button to={fields.primary_cta.url} variant={dark ? 'onDark' : 'primary'}>
                 {fields.primary_cta.label}
@@ -296,9 +301,9 @@ function Hero({ section }) {
           <div className="mt-14">
             <Img
               image={fields.image}
-              sizes="(min-width: 1024px) 80rem, 100vw"
+              sizes="(min-width: 1024px) 64rem, 100vw"
               priority
-              className="rounded-2xl shadow-xl"
+              className="mx-auto rounded-2xl shadow-xl"
             />
           </div>
         )}

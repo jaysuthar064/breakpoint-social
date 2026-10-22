@@ -318,8 +318,13 @@ function ContactSection({ section }) {
 }
 
 function BlogList({ posts, bare }) {
+  /*
+   * Always padded at the top. It used to rely on the hero above for that
+   * spacing, and once the hero gained a bottom rule the first row of cards sat
+   * flush against the line.
+   */
   return (
-    <section className={`${bare ? 'py-20 md:py-28' : 'pb-20 md:pb-28'} bg-[#fcf5e9]`}>
+    <section className="bg-[#fcf5e9] py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {bare && (
           <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
