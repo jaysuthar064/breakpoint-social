@@ -45,6 +45,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenContact, nav }) => {
                   src="/images/breakpoint-logo.png" 
                   alt="Breakpoint Social Logo" 
                   className="h-10 w-auto object-contain transition-transform group-hover:scale-102"
+                  /*
+                   * The logo artwork is sand-coloured ink, drawn for a dark
+                   * background. On this cream header it washes out to barely
+                   * visible. brightness(0.4) takes it to a deep brown that
+                   * reads at roughly 7:1, and saturate keeps it warm rather
+                   * than grey. The real fix is a dark-ink version of the file.
+                   */
+                  style={{ filter: 'brightness(0.4) saturate(1.15)' }}
                   onError={() => setLogoLoaded(false)}
                 />
               ) : (
