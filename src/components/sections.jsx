@@ -172,55 +172,118 @@ function Hero({ section }) {
   const { fields, background } = section;
   const dark = isDark(background);
 
+  /*
+   * The homepage's hero, applied to every page.
+   *
+   * Left-aligned rather than centred, because the homepage is and a centred
+   * heading beside a left-aligned one reads as a different site. The second
+   * headline line carries the sand highlight; the eyebrow gets its rule and
+   * note. Each of those is optional, so a page that only ever had a heading
+   * still renders as one clean line.
+   */
   return (
     <section
-      className={`relative overflow-hidden py-24 md:py-32 ${
-        dark ? 'bg-[#141615] text-white' : 'bg-[#fcf5e9]'
+      className={`relative overflow-hidden border-b py-20 md:py-28 ${
+        dark ? 'border-white/10 bg-[#141615] text-white' : 'border-[#84572f]/10 bg-[#fcf5e9]'
       }`}
     >
-      <div data-reveal className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-        <Eyebrow dark={dark}>{fields.eyebrow}</Eyebrow>
+      {/* The ambient wash the homepage hero sits on. Decorative only. */}
+      <div
+        className="pointer-events-none absolute top-0 right-0 -mt-24 -mr-24 h-96 w-96 rounded-full bg-[#f1d5a0]/40 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 -mb-24 -ml-24 h-96 w-96 rounded-full bg-[#92ada4]/30 blur-3xl"
+        aria-hidden="true"
+      />
 
-        <h1
-          className={`text-4xl leading-[1.08] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl ${
-            dark ? 'text-white' : 'text-[#141615]'
-          }`}
-        >
-          {/*
-            Each line is wiped up from behind its own edge rather than faded in.
-            The wrapper is overflow-hidden and the inner span does the moving,
-            which is what makes it read as the words being uncovered.
-          */}
-          <span className="hero-line">
-            <span>{fields.heading}</span>
-          </span>
-          {fields.script_accent && (
-            <span className="hero-line">
-              {/* leading-[1.1] and the padding keep descenders from clipping. */}
-              <span className="font-script inline-block pb-1 text-4xl leading-[1.1] lowercase sm:text-6xl lg:text-7xl text-[#84572f]">
-                {fields.script_accent}
-              </span>
+      <div data-reveal className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {fields.eyebrow && (
+          <div className="mb-6 flex items-center gap-3">
+            <span
+              className={`text-xs font-bold tracking-[0.25em] uppercase ${
+                dark ? 'text-[#f1d5a0]' : 'text-[#84572f]'
+              }`}
+            >
+              {fields.eyebrow}
             </span>
-          )}
-        </h1>
 
-        {fields.subtext && (
-          <p
-            className={`mx-auto mt-6 max-w-2xl text-lg leading-relaxed ${
-              dark ? 'text-white/80' : 'text-[#141615]/75'
-            }`}
-          >
-            {fields.subtext}
-          </p>
+            {fields.eyebrow_note && (
+              <>
+                <span
+                  className={`h-px w-12 ${dark ? 'bg-white/30' : 'bg-[#84572f]/30'}`}
+                  aria-hidden="true"
+                />
+                <span
+                  className={`text-xs font-medium ${dark ? 'text-white/60' : 'text-[#1c1c1c]/60'}`}
+                >
+                  {fields.eyebrow_note}
+                </span>
+              </>
+            )}
+          </div>
         )}
 
+        <div className="max-w-4xl">
+          <h1
+            className={`font-display text-4xl leading-[1.08] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl ${
+              dark ? 'text-white' : 'text-[#141615]'
+            }`}
+          >
+            <span className="hero-line">
+              <span>{fields.heading}</span>
+            </span>
+
+            {fields.heading_accent && (
+              <>
+                <br />
+                <span className="hero-line">
+                  {/*
+                    The highlight is a bar behind the text rather than a
+                    text-decoration, so it keeps its weight at display sizes
+                    and does not move with the baseline.
+                  */}
+                  <span className="relative inline-block text-[#84572f]">
+                    {fields.heading_accent}
+                    <span
+                      className="absolute bottom-1 left-0 -z-10 h-2 w-full rounded-sm bg-[#f1d5a0]/60"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </span>
+              </>
+            )}
+          </h1>
+
+          {fields.subtext && (
+            <p
+              className={`mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl ${
+                dark ? 'text-white/80' : 'text-[#1c1c1c]/80'
+              }`}
+            >
+              {fields.subtext}
+            </p>
+          )}
+
+          {fields.script_accent && (
+            <p
+              className={`font-script mt-2 text-xl sm:text-2xl ${
+                dark ? 'text-[#f1d5a0]' : 'text-[#84572f]'
+              }`}
+            >
+              {fields.script_accent}
+            </p>
+          )}
+        </div>
+
         {(fields.primary_cta || fields.secondary_cta) && (
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-10 flex flex-col items-stretch gap-4 pt-4 sm:flex-row sm:items-center sm:gap-6">
             {fields.primary_cta && (
               <Button to={fields.primary_cta.url} variant={dark ? 'onDark' : 'primary'}>
                 {fields.primary_cta.label}
               </Button>
             )}
+
             {fields.secondary_cta && (
               <Button to={fields.secondary_cta.url} variant="secondary">
                 {fields.secondary_cta.label}
@@ -233,9 +296,9 @@ function Hero({ section }) {
           <div className="mt-14">
             <Img
               image={fields.image}
-              sizes="(min-width: 1024px) 64rem, 100vw"
+              sizes="(min-width: 1024px) 80rem, 100vw"
               priority
-              className="mx-auto rounded-2xl shadow-xl"
+              className="rounded-2xl shadow-xl"
             />
           </div>
         )}
