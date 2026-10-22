@@ -16,10 +16,6 @@
  */
 
 export const HOME_DEFAULTS = {
-  announcement: {
-    text: 'Breakpoint Social · San Diego Social Media Agency — Client Case Studies & Campaign Showcase',
-  },
-
   hero: {
     eyebrow: 'OUR WORK',
     eyebrow_note: 'Portfolio & Case Studies',
@@ -118,7 +114,6 @@ export const HOME_DEFAULTS = {
  * Which CMS section type feeds which part of the page.
  */
 const SECTION_MAP = {
-  home_announcement: 'announcement',
   home_hero: 'hero',
   home_results: 'results',
   home_cta: 'cta',
@@ -188,8 +183,7 @@ export function homeContent(snapshot) {
   const sections = snapshot?.pages?.['']?.sections ?? [];
 
   const content = {
-    announcement: HOME_DEFAULTS.announcement,
-    hero: HOME_DEFAULTS.hero,
+      hero: HOME_DEFAULTS.hero,
     results: HOME_DEFAULTS.results,
     cta: HOME_DEFAULTS.cta,
   };

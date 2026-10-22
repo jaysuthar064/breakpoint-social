@@ -24,6 +24,7 @@ import { CampaignDetailModal } from './components/CampaignDetailModal';
 import { ContactModal } from './components/ContactModal';
 import { INITIAL_CAMPAIGNS } from './data/campaigns';
 import { homeContent } from './content.js';
+import { AnnouncementBar } from '../components/AnnouncementBar.jsx';
 import { buildHomeNav } from '../lib/nav.js';
 import { campaignsFromCms } from './campaigns-from-cms.js';
 import { reelsFromCms } from './reels-from-cms.js';
@@ -95,10 +96,7 @@ export function HomeShowcase({ snapshot = null }: { snapshot?: any }) {
   return (
     <div className="min-h-screen bg-[#fcf5e9] text-[#1c1c1c] flex flex-col font-body selection:bg-[#92ada4] selection:text-white">
       {/* Top Announcement Bar */}
-      <div className="bg-[#84572f] text-white text-[11px] py-1.5 px-4 text-center tracking-wider uppercase font-semibold flex items-center justify-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#f1d5a0] animate-pulse" />
-        <span>{content.announcement.text}</span>
-      </div>
+      <AnnouncementBar text={snapshot?.settings?.announcement} />
 
       {/* Main Header */}
       <Header onOpenContact={() => setIsContactOpen(true)} nav={nav} />

@@ -6,6 +6,7 @@ import { initMagnetic, supportsScrollTimeline } from './lib/motion.js';
 import { initReveal } from './lib/reveal.js';
 import { buildNav } from './lib/nav.js';
 import { Link, RouterProvider, useRouter } from './lib/router.jsx';
+import { AnnouncementBar } from './components/AnnouncementBar.jsx';
 import { Footer, Header, SkipLink } from './components/Chrome.jsx';
 import { Loading } from './components/Loading.jsx';
 import { ContactForm } from './components/ContactForm.jsx';
@@ -159,6 +160,8 @@ function Site({ snapshot, fromNetwork = false }) {
         path !== '/blog/' &&
         path !== '/our-work/' &&
         supportsScrollTimeline() && <div className="read-progress" aria-hidden="true" />}
+
+      <AnnouncementBar text={snapshot.settings?.announcement} />
 
       <Header nav={nav} branding={snapshot.settings} />
 
