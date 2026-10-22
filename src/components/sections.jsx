@@ -357,10 +357,27 @@ function FeatureList({ section }) {
         {items.map((item, index) => (
           <li
             key={index}
-            className={`rounded-2xl border p-6 ${
-              dark ? 'border-white/10 bg-white/5' : 'border-[#84572f]/10 bg-white shadow-sm'
+            className={`flex items-start gap-3.5 rounded-2xl border p-6 transition-colors ${
+              dark
+                ? 'border-white/10 bg-white/5 hover:border-[#f1d5a0]/40'
+                : 'border-[#84572f]/10 bg-white shadow-sm hover:border-[#84572f]/30'
             }`}
           >
+            {/*
+              The numbered marker from the homepage's trust points. It carries
+              the position, so the list reads as a sequence rather than as four
+              unrelated cards.
+            */}
+            <span
+              className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold ${
+                dark ? 'bg-[#f1d5a0]/20 text-[#f1d5a0]' : 'bg-[#92ada4]/20 text-[#526840]'
+              }`}
+              aria-hidden="true"
+            >
+              {String(index + 1).padStart(2, '0')}
+            </span>
+
+            <div>
             <h3
               className={`text-lg font-extrabold tracking-tight ${
                 dark ? 'text-white' : 'text-[#141615]'
@@ -375,6 +392,7 @@ function FeatureList({ section }) {
                 {item.body}
               </p>
             )}
+            </div>
           </li>
         ))}
       </ul>
@@ -563,10 +581,21 @@ function TestimonialSet({ section }) {
         {items.map((item) => (
           <figure
             key={item.id}
-            className={`flex flex-col rounded-2xl border p-7 ${
-              dark ? 'border-white/10 bg-white/5' : 'border-[#84572f]/10 bg-white shadow-sm'
+            className={`flex flex-col rounded-2xl border p-7 transition-colors ${
+              dark
+                ? 'border-white/10 bg-white/5 hover:border-[#f1d5a0]/40'
+                : 'border-[#84572f]/10 bg-white shadow-sm hover:border-[#84572f]/30'
             }`}
           >
+            <span
+              className={`font-display mb-3 text-4xl leading-none ${
+                dark ? 'text-[#f1d5a0]/70' : 'text-[#84572f]/40'
+              }`}
+              aria-hidden="true"
+            >
+              &ldquo;
+            </span>
+
             <blockquote
               className={`flex-1 text-lg leading-relaxed ${
                 dark ? 'text-white/85' : 'text-[#141615]/80'
