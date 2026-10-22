@@ -16,3 +16,6 @@ dist-ssr/
 # deploy, so they are served from wherever VITE_VIDEO_BASE points. The source
 # files live in ../assets/videos.
 public/videos/
+
+.vercel
+.env*

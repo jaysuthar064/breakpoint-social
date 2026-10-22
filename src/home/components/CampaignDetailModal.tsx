@@ -189,6 +189,7 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
                           <video
                             src={resolveVideoSrc(media.src)}
                             poster={media.poster}
+                            preload="none"
                             muted
                             playsInline
                             className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"

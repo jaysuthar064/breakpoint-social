@@ -97,6 +97,15 @@ const CreativeExampleCard: React.FC<{
               ref={videoRef}
               src={resolveVideoSrc(customSrc)}
               poster={item.poster || item.posterUrl}
+              /*
+               * Nothing here plays until someone presses play, but without
+               * this the browser still reaches for each file on load. The
+               * featured gallery alone points at ~50MB on a shared host, and
+               * a non-faststart encode makes the browser pull a large chunk
+               * just to find the moov atom. The poster is what the card
+               * actually shows, so there is nothing to gain by fetching early.
+               */
+              preload="none"
               playsInline
               loop
               muted={isMuted}

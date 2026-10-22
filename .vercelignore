@@ -1,0 +1,13 @@
+# What the CLI must not upload.
+#
+# Vercel builds from source, so anything generated here is dead weight -- and
+# the videos are 239MB that live in the WordPress media library now, not in
+# this repo. Uploading them is what made `vercel --prod` abort.
+
+node_modules/
+dist/
+dist-ssr/
+.prerender-template.html
+
+# Served from WordPress uploads; see src/home/media.js.
+public/videos/
