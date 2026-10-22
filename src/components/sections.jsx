@@ -475,35 +475,69 @@ function StatRow({ section }) {
   const dark = isDark(background);
   const stats = fields.stats ?? [];
 
+  /*
+   * The homepage's metric cards, applied here.
+   *
+   * The accent bar across the top alternates by position rather than being
+   * chosen per card: an editor picking a gradient per figure is how a
+   * considered design turns into a ransom note, and the alternation is what
+   * gives the row its rhythm.
+   */
+  const ACCENTS = [
+    'from-[#f1d5a0]/30 to-[#84572f]/20',
+    'from-[#92ada4]/30 to-[#526840]/20',
+  ];
+
   return (
     <Band background={background}>
       {(fields.eyebrow || fields.heading) && (
         <SectionHead eyebrow={fields.eyebrow} heading={fields.heading} dark={dark} />
       )}
 
-      <dl data-reveal data-reveal-stagger className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <dl
+        data-reveal
+        data-reveal-stagger
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {stats.map((stat, index) => (
           <div
             key={index}
-            className={`rounded-2xl border p-6 text-center ${
-              dark ? 'border-white/10 bg-white/5' : 'border-[#84572f]/10 bg-white shadow-sm'
+            className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-7 transition-all duration-300 ${
+              dark
+                ? 'border-white/10 bg-[#181a19] hover:border-[#f1d5a0]/50 hover:shadow-2xl hover:shadow-[#84572f]/10'
+                : 'border-[#84572f]/10 bg-white shadow-sm hover:border-[#84572f]/30 hover:shadow-xl'
             }`}
           >
+            <div
+              className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${
+                ACCENTS[index % ACCENTS.length]
+              }`}
+              aria-hidden="true"
+            />
+
             {/* tabular-nums keeps the figures aligned across the row. */}
             <dt className="sr-only">{stat.label}</dt>
+
             <dd
-              className={`font-mono text-2xl font-extrabold tabular-nums sm:text-3xl ${
-                dark ? 'text-[#f1d5a0]' : 'text-[#84572f]'
+              className={`font-display text-4xl font-black tracking-tight tabular-nums transition-colors sm:text-5xl ${
+                dark ? 'text-white group-hover:text-[#f1d5a0]' : 'text-[#141615] group-hover:text-[#84572f]'
               }`}
             >
               {stat.value}
             </dd>
-            <p
-              className={`mt-1.5 text-sm ${dark ? 'text-white/70' : 'text-[#141615]/65'}`}
-              aria-hidden="true"
+
+            <div
+              className={`mt-5 border-t pt-4 ${dark ? 'border-white/10' : 'border-[#84572f]/10'}`}
             >
-              {stat.label}
-            </p>
+              <p
+                className={`font-mono text-xs font-bold tracking-wider uppercase ${
+                  dark ? 'text-white/90' : 'text-[#141615]/85'
+                }`}
+                aria-hidden="true"
+              >
+                {stat.label}
+              </p>
+            </div>
           </div>
         ))}
       </dl>
@@ -562,15 +596,43 @@ function CtaBand({ section }) {
   const { fields, background } = section;
   const dark = isDark(background);
 
+  /*
+   * The homepage's closing band, applied here: the ambient wash behind it, the
+   * wide-tracked eyebrow, and a sand button rather than a clay one, because on
+   * the dark panel clay-on-near-black is the weakest contrast on the page.
+   */
   return (
     <section
       className={`relative overflow-hidden py-24 md:py-32 ${
-        dark ? 'bg-[#0e100f] text-white' : 'bg-[#f6f8f5]'
+        dark ? 'bg-[#141615] text-white' : 'bg-[#f6f8f5]'
       }`}
     >
+      <div
+        className={`pointer-events-none absolute top-0 right-1/4 h-96 w-96 rounded-full blur-3xl ${
+          dark ? 'bg-[#84572f]/25' : 'bg-[#f1d5a0]/40'
+        }`}
+        aria-hidden="true"
+      />
+      <div
+        className={`pointer-events-none absolute bottom-0 left-1/4 h-96 w-96 rounded-full blur-3xl ${
+          dark ? 'bg-[#92ada4]/15' : 'bg-[#92ada4]/25'
+        }`}
+        aria-hidden="true"
+      />
+
       <div data-reveal className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        {fields.eyebrow && (
+          <p
+            className={`mb-4 text-xs font-bold tracking-[0.25em] uppercase ${
+              dark ? 'text-[#f1d5a0]' : 'text-[#84572f]'
+            }`}
+          >
+            {fields.eyebrow}
+          </p>
+        )}
+
         <h2
-          className={`text-3xl font-extrabold tracking-tight text-balance sm:text-5xl ${
+          className={`font-display text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl lg:text-6xl ${
             dark ? 'text-white' : 'text-[#141615]'
           }`}
         >
@@ -579,8 +641,8 @@ function CtaBand({ section }) {
 
         {fields.body && (
           <p
-            className={`mx-auto mt-5 max-w-2xl text-lg leading-relaxed ${
-              dark ? 'text-white/80' : 'text-[#141615]/75'
+            className={`mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-xl ${
+              dark ? 'text-neutral-300' : 'text-[#141615]/75'
             }`}
           >
             {fields.body}
@@ -588,7 +650,7 @@ function CtaBand({ section }) {
         )}
 
         {fields.primary_cta && (
-          <div className="mt-9">
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button to={fields.primary_cta.url} variant={dark ? 'onDark' : 'primary'}>
               {fields.primary_cta.label}
             </Button>
