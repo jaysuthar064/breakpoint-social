@@ -35,7 +35,9 @@ function toMediaItem(row, campaignId, index) {
     }
   }
 
-  const video = row.videoUrl || '';
+  // The uploaded file wins over the URL field: one is in the media library
+  // and travels with a backup, the other is a path somebody typed.
+  const video = row.video?.url || row.videoUrl || '';
 
   return {
     id: `${campaignId}-media-${index}`,

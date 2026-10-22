@@ -42,13 +42,16 @@ export function reelsFromCms(snapshot) {
       }
 
       const poster = item.poster?.url ?? '';
+      // The uploaded file wins over the URL field: one is in the media library
+      // and travels with a backup, the other is a path somebody typed.
+      const video = item.video?.url || item.videoUrl || '';
 
       return {
         id: `reel-${item.id}`,
         reelCode: item.reelCode ?? '',
         title: item.title ?? '',
         category: item.category ?? 'Creative Production',
-        videoUrl: item.videoUrl ?? '',
+        videoUrl: video,
         posterUrl: poster,
         coverImage: poster,
         talent: item.talent || undefined,
